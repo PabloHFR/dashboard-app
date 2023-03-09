@@ -65,12 +65,7 @@ export default function Dashboard() {
         <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px">
-          <Box
-            p="8"
-            bg="gray.800"
-            borderRadius={8}
-            // pb="4"
-          >
+          <Box p="8" bg="gray.800" borderRadius={8} pb="4">
             <Text fontSize="lg" mb="4">
               Inscritos da Semana
             </Text>
