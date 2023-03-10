@@ -15,10 +15,17 @@ import {
   Th,
   Thead,
   Tr,
+  useBreakpointValue,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
 export default function UserList() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
+
   return (
     <Box>
       <Header />
@@ -32,31 +39,33 @@ export default function UserList() {
               Usuários
             </Heading>
 
-            <Button
-              as="a"
-              size="sm"
-              fontSize="sm"
-              colorScheme="purple"
-              leftIcon={<Icon as={RiAddLine} />}
-            >
-              Criar novo
-            </Button>
+            <Link href="/users/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="purple"
+                leftIcon={<Icon as={RiAddLine} />}
+              >
+                Criar novo
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
             <Thead>
               <Tr>
-                <Th px="6" color="gray.300" width="8">
+                <Th px={["4", "4", "6"]} color="gray.300" width="8">
                   <Checkbox colorScheme="purple" />
                 </Th>
                 <Th>Usuário</Th>
-                <Th>Data de Cadastro</Th>
+                {isWideVersion && <Th>Data de Cadastro</Th>}
                 <Th width="8"></Th>
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
-                <Td px="6">
+                <Td px={["4", "4", "6"]}>
                   <Checkbox colorScheme="purple" />
                 </Td>
                 <Td>
@@ -68,7 +77,7 @@ export default function UserList() {
                     </Text>
                   </Box>
                 </Td>
-                <Td>08 de Março de 2023</Td>
+                {isWideVersion && <Td>08 de Março de 2023</Td>}
                 <Td>
                   <Button
                     as="a"
