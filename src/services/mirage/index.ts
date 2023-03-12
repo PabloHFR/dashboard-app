@@ -1,4 +1,4 @@
-import { createServer, Model } from "miragejs";
+import { createServer, Factory, Model } from "miragejs";
 
 type User = {
   name: string;
@@ -10,6 +10,24 @@ export function makeServer() {
   const server = createServer({
     models: {
       user: Model.extend<Partial<User>>({}),
+    },
+
+    factories: {
+      user: Factory.extend({
+        name(i) {
+          return `User ${i + 1}`;
+        },
+        email(i) {
+          return `User ${i + 1}`;
+        },
+        createdAt(i) {
+          return `2023-02-12T00:00:00.000Z`;
+        },
+      }),
+    },
+
+    seeds(server) {
+      server.createList("user", 200);
     },
 
     routes() {
