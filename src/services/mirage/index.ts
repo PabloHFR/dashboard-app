@@ -18,16 +18,16 @@ export function makeServer() {
           return `User ${i + 1}`;
         },
         email(i) {
-          return `User ${i + 1}`;
+          return `user${i + 1}@gmail.com`;
         },
-        createdAt(i) {
+        createdAt() {
           return `2023-02-12T00:00:00.000Z`;
         },
       }),
     },
 
     seeds(server) {
-      server.createList("user", 200);
+      server.createList("user", 10);
     },
 
     routes() {

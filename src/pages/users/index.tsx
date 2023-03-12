@@ -19,15 +19,39 @@ import {
   useBreakpointValue,
   Spinner,
 } from "@chakra-ui/react";
-import Link from "next/link";
+import dynamic from "next/dynamic";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
+const Link = dynamic(() => import("next/link"), {
+  ssr: false,
+});
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
 export default function UserList() {
-  const { data, isLoading, error } = useQuery("users", async () => {
+  const { data, isLoading, error } = useQuery<User[]>("users", async () => {
     const response = await fetch("http://localhost:3000/api/users");
     const data = await response.json();
 
-    return data;
+    const users = data.users.map((user: User) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+      };
+    });
+
+    return users;
   });
 
   const isWideVersion = useBreakpointValue({
@@ -54,7 +78,7 @@ export default function UserList() {
                 size="sm"
                 fontSize="sm"
                 colorScheme="purple"
-                leftIcon={<Icon as={RiAddLine} />}
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
               >
                 Criar novo
               </Button>
@@ -83,32 +107,36 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td px={["4", "4", "6"]}>
-                      <Checkbox colorScheme="purple" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">Nome do Usuário</Text>
+                  {data!.map((user) => {
+                    return (
+                      <Tr key={user.id}>
+                        <Td px={["4", "4", "6"]}>
+                          <Checkbox colorScheme="purple" />
+                        </Td>
+                        <Td>
+                          <Box>
+                            <Text fontWeight="bold">{user.name}</Text>
 
-                        <Text fontWeight="bold" color="gray.300">
-                          email@gmail.com
-                        </Text>
-                      </Box>
-                    </Td>
-                    {isWideVersion && <Td>08 de Março de 2023</Td>}
-                    <Td>
-                      <Button
-                        as="a"
-                        size="sm"
-                        fontSize="sm"
-                        colorScheme="pink"
-                        leftIcon={<Icon as={RiPencilLine} />}
-                      >
-                        Editar
-                      </Button>
-                    </Td>
-                  </Tr>
+                            <Text fontWeight="bold" color="gray.300">
+                              {user.email}
+                            </Text>
+                          </Box>
+                        </Td>
+                        {isWideVersion && <Td>{user.createdAt}</Td>}
+                        <Td>
+                          <Button
+                            as="a"
+                            size="sm"
+                            fontSize="sm"
+                            colorScheme="pink"
+                            leftIcon={<Icon as={RiPencilLine} />}
+                          >
+                            Editar
+                          </Button>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
 
