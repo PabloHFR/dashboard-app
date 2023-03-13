@@ -14,7 +14,7 @@ export default function Home() {
         flexDir="column"
       >
         <Stack spacing={4}>
-          <Input name="email" type="email" label="email"></Input>
+          <Input name="email" type="email" label="E-mail"></Input>
           <Input name="password" type="password" label="Senha"></Input>
         </Stack>
 
