@@ -9,6 +9,7 @@ import {
   Heading,
   Icon,
   Text,
+  Link as ChakraLink,
   Table,
   Tbody,
   Td,
@@ -22,6 +23,8 @@ import dynamic from "next/dynamic";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { useUsers } from "@/services/hooks/useUsers";
 import { useState } from "react";
+import { queryClient } from "@/services/queryClient";
+import { api } from "@/services/api";
 
 const Link = dynamic(() => import("next/link"), {
   ssr: false,
@@ -36,6 +39,20 @@ export default function UserList() {
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
+
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 5, // 5 minutes
+      }
+    );
+  }
 
   return (
     <Box>
@@ -96,7 +113,12 @@ export default function UserList() {
                         </Td>
                         <Td>
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <ChakraLink
+                              color="pink.400"
+                              onMouseEnter={() => handlePrefetchUser(user.id)}
+                            >
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </ChakraLink>
 
                             <Text fontWeight="bold" color="gray.300">
                               {user.email}
