@@ -47,7 +47,6 @@ export function makeServer() {
     },
 
     routes() {
-      server.urlPrefix = `${process.env.PRODUCTION_URL}/api`;
       this.namespace = "api";
       this.timing = 750; // 750ms
 
