@@ -47,6 +47,7 @@ export function makeServer() {
     },
 
     routes() {
+      this.urlPrefix = "https://dashboard-app-azure.vercel.app";
       this.namespace = "api";
       this.timing = 750; // 750ms
 
